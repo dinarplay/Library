@@ -1,0 +1,130 @@
+﻿@page "/alluser"
+@inherits AllUserModel
+@attribute [Authorize(Roles = "1")]
+
+@using Blazored.FluentValidation
+@using Microsoft.AspNetCore.Components.QuickGrid;
+
+
+<QuickGrid Items="UserDisplayService.TempUsers.AsQueryable()" Pagination="UserDisplayService.Pagination" @ref="UserDisplayService.Grid">
+    <PropertyColumn Property="c => c.Id" Sortable="true" IsDefaultSort="SortDirection.Ascending"></PropertyColumn>
+    <PropertyColumn Property="c => c.Name.ToUpper()" Sortable="true" IsDefaultSort="SortDirection.Ascending" Title="Имя"></PropertyColumn>
+    <PropertyColumn Property="c => c.Email" Sortable="true" IsDefaultSort="SortDirection.Ascending" Title="Email"></PropertyColumn>
+    <PropertyColumn Property="c => c.Role.Name" Sortable="true" IsDefaultSort="SortDirection.Ascending" Title="Роль">
+        <ColumnOptions>
+            @foreach (var item in UserDisplayService.Roles)
+            {
+            <div>
+                    <input type="checkbox" @bind="item.IsChoised" @bind:after="UserDisplayService.UpdateGrid" />
+            <label>@item.Name</label>
+            </div>
+            }
+            <label @onclick="UserDisplayService.ResetGrid">Сброс</label>
+        </ColumnOptions>
+    </PropertyColumn>
+
+    <PropertyColumn Property="c => c.Password" Sortable="true" IsDefaultSort="SortDirection.Ascending" Title="Пароль"></PropertyColumn>
+
+    <TemplateColumn Align="Align.Center" Title="Actions">
+        <button @onclick="() => UserManagerService.CallChangeMenu(context)">Edit</button>
+    </TemplateColumn>
+    <TemplateColumn Align="Align.Center" Title="Actions">
+        <button @onclick="() => UserManagerService.DeleteUser(context)">Delete</button>
+    </TemplateColumn>
+</QuickGrid>
+<Paginator Value="UserDisplayService.Pagination" />
+
+@if (UserManagerService.IsShowChangeMenu)
+{
+    <div class="about">
+        <EditForm Context="editContext1" Model="UserManagerService.CurrentUser" class="form" OnValidSubmit="() => UserManagerService.ChangeUser(UserManagerService.CurrentUser)">
+            <FluentValidationValidator />
+            <ValidationSummary />
+            <div class="about__block">
+                <div>
+                    <label class="about__block__label" for="Name">Имя</label>
+                </div>
+                <div>
+                    <InputText class="about__block__input" @bind-Value="UserManagerService.CurrentUser.Name"></InputText>
+                </div>
+            </div>
+            <div class="about__block">
+                <div>
+                    <label class="about__block__label" for="Email">Email</label>
+                </div>
+                <div>
+                    <InputText class="about__block__input" @bind-Value="UserManagerService.CurrentUser.Email"></InputText>
+                </div>
+            </div>
+            <div class="about__block">
+                <div>
+                    <label class="about__block__label" for="RoleId">RoleId</label>
+                </div>
+                <div>
+                    <InputNumber class="about__block__input" @bind-Value="UserManagerService.CurrentUser.RoleId"></InputNumber>
+                </div>
+            </div>
+            <div class="about__block">
+                <div>
+                    <label class="about__block__label" for="Password">Текущий пароль</label>
+                </div>
+                <div>
+                    <InputText class="about__block__input" @bind-Value="UserManagerService.CurrentUser.Password"></InputText>
+                </div>
+            </div>      
+            <div class="about__block confirm-but">
+                <div>
+                    <button type="submit">Изменить</button>
+                </div>
+            </div>
+        </EditForm>
+    </div>
+}
+<hr />
+<button @onclick="() => UserManagerService.CallAddMenu()">Добавить</button>
+@if (UserManagerService.IsShowAddMenu)
+{
+    <div class="about">
+        <EditForm Context="editContext2" Model="UserManagerService.NewUser" class="form" OnValidSubmit="() => UserManagerService.AddUser(UserManagerService.NewUser)">
+            <FluentValidationValidator />
+            <ValidationSummary />
+            <div class="about__block">
+                <div>
+                    <label class="about__block__label" for="Name">Имя</label>
+                </div>
+                <div>
+                    <InputText class="about__block__input" @bind-Value="UserManagerService.NewUser.Name"></InputText>
+                </div>
+            </div>
+            <div class="about__block">
+                <div>
+                    <label class="about__block__label" for="Email">Email</label>
+                </div>
+                <div>
+                    <InputText class="about__block__input" @bind-Value="UserManagerService.NewUser.Email"></InputText>
+                </div>
+            </div>
+            <div class="about__block">
+                <div>
+                    <label class="about__block__label" for="RoleId">RoleId</label>
+                </div>
+                <div>
+                    <InputNumber class="about__block__input" @bind-Value="UserManagerService.NewUser.RoleId"></InputNumber>
+                </div>
+            </div>
+            <div class="about__block">
+                <div>
+                    <label class="about__block__label" for="Password">Текущий пароль</label>
+                </div>
+                <div>
+                    <InputText class="about__block__input" @bind-Value="UserManagerService.NewUser.Password"></InputText>
+                </div>
+            </div>
+            <div class="about__block confirm-but">
+                <div>
+                    <button type="submit">Добавить</button>
+                </div>
+            </div>
+        </EditForm>
+    </div>
+}

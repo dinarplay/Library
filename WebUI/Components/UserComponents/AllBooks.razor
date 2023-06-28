@@ -1,0 +1,51 @@
+﻿@page "/allbooks"
+@inherits AllBooksModel
+
+@using Microsoft.AspNetCore.Components.QuickGrid;
+
+<QuickGrid Items="BookDisplayService.TempBooks.AsQueryable()" Pagination="BookDisplayService.Pagination" @ref="BookDisplayService.Grid">
+    <PropertyColumn Property="c => c.Id" Sortable="true" IsDefaultSort="SortDirection.Ascending"></PropertyColumn>
+    <PropertyColumn Property="c => c.Title.ToUpper()" Sortable="true" IsDefaultSort="SortDirection.Ascending" Title="Название"></PropertyColumn>
+    <PropertyColumn Property="c => c.Description" Sortable="true" IsDefaultSort="SortDirection.Ascending" Title="Описание"></PropertyColumn>
+    <PropertyColumn Property="c => c.Count" Sortable="true" IsDefaultSort="SortDirection.Ascending" Title="Кол-во"></PropertyColumn>
+    <PropertyColumn Property="c => c.Author.Name" Sortable="true" IsDefaultSort="SortDirection.Ascending" Title="Автор">
+        <ColumnOptions>
+            @foreach (var item in BookDisplayService.Authors)
+            {
+                <div>
+                    <input type="checkbox" @bind="item.IsChoised" @bind:after="BookDisplayService.UpdateGrid" />
+                    <label>@item.Name</label>
+                </div>
+            }
+            <label @onclick="BookDisplayService.ResetGrid">Сброс</label>
+        </ColumnOptions>
+    </PropertyColumn>
+    <PropertyColumn Property="c => c.Genre.Name" Sortable="true" IsDefaultSort="SortDirection.Ascending" Title="Жанр">
+        <ColumnOptions>
+            @foreach (var item in BookDisplayService.Genres)
+            {
+                <div>
+                    <input type="checkbox" @bind="item.IsChoised" @bind:after="BookDisplayService.UpdateGrid" />
+                    <label>@item.Name</label>
+                </div>
+            }
+            <label @onclick="BookDisplayService.ResetGrid">Сброс</label>
+        </ColumnOptions>
+    </PropertyColumn>
+    <PropertyColumn Property="c => c.Publisher.Name" Sortable="true" IsDefaultSort="SortDirection.Ascending" Title="Издатель">
+        <ColumnOptions>
+            @foreach (var item in BookDisplayService.Publishers)
+            {
+                <div>
+                    <input type="checkbox" @bind="item.IsChoised" @bind:after="BookDisplayService.UpdateGrid" />
+                    <label>@item.Name</label>
+                </div>
+            }
+            <label @onclick="BookDisplayService.ResetGrid">Сброс</label>
+        </ColumnOptions>
+    </PropertyColumn>
+    <TemplateColumn Align="Align.Center" Title="Actions">
+        <button @onclick="() => ReserveManagerService.DoReserve(context)">Забронировать</button>
+    </TemplateColumn>
+</QuickGrid>
+<Paginator Value="BookDisplayService.Pagination" />

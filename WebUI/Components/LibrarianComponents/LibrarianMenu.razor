@@ -1,0 +1,195 @@
+﻿@page "/librmenu"
+@inherits LibrarianMenuModel
+@attribute [Authorize(Roles = "1,3")]
+
+
+@using Blazored.FluentValidation
+@using Microsoft.AspNetCore.Components.QuickGrid;
+
+<QuickGrid Items="BookDisplayService.TempBooks.AsQueryable()" Pagination="BookDisplayService.Pagination" @ref="BookDisplayService.Grid">
+    <PropertyColumn Property="c => c.Id" Sortable="true" IsDefaultSort="SortDirection.Ascending"></PropertyColumn>
+    <PropertyColumn Property="c => c.Title.ToUpper()" Sortable="true" IsDefaultSort="SortDirection.Ascending" Title="Название"></PropertyColumn>
+    <PropertyColumn Property="c => c.Description" Sortable="true" IsDefaultSort="SortDirection.Ascending" Title="Описание"></PropertyColumn>
+    <PropertyColumn Property="c => c.Count" Sortable="true" IsDefaultSort="SortDirection.Ascending" Title="Кол-во"></PropertyColumn>
+    <PropertyColumn Property="c => c.Author.Name" Sortable="true" IsDefaultSort="SortDirection.Ascending" Title="Автор">
+        <ColumnOptions>
+            @foreach (var item in BookDisplayService.Authors)
+            {
+            <div>
+                    <input type="checkbox" @bind="item.IsChoised" @bind:after="BookDisplayService.UpdateGrid" />
+                <label>@item.Name</label>
+            </div>
+            }
+            <label @onclick="BookDisplayService.ResetGrid">Сброс</label>
+        </ColumnOptions>
+    </PropertyColumn>
+    <PropertyColumn Property="c => c.Genre.Name" Sortable="true" IsDefaultSort="SortDirection.Ascending" Title="Жанр">
+        <ColumnOptions>
+            @foreach (var item in BookDisplayService.Genres)
+            {
+            <div>
+                    <input type="checkbox" @bind="item.IsChoised" @bind:after="BookDisplayService.UpdateGrid" />
+                <label>@item.Name</label>
+            </div>
+            }
+            <label @onclick="BookDisplayService.ResetGrid">Сброс</label>
+        </ColumnOptions>
+    </PropertyColumn>
+    <PropertyColumn Property="c => c.Publisher.Name" Sortable="true" IsDefaultSort="SortDirection.Ascending" Title="Издатель">
+        <ColumnOptions>
+            @foreach (var item in BookDisplayService.Publishers)
+            {
+            <div>
+                    <input type="checkbox" @bind="item.IsChoised" @bind:after="BookDisplayService.UpdateGrid" />
+                <label>@item.Name</label>
+            </div>
+            }
+            <label @onclick="BookDisplayService.ResetGrid">Сброс</label>
+        </ColumnOptions>
+    </PropertyColumn>
+    <TemplateColumn Align="Align.Center" Title="Actions">
+        <button @onclick="() => BookManagerService.DeleteBook(context)">Delete</button>
+    </TemplateColumn>
+</QuickGrid>
+<Paginator Value="BookDisplayService.Pagination" />
+
+<button @onclick="() => BookManagerService.CallAddMenu()">Добавить</button>
+@if (BookManagerService.IsShowAddMenu)
+{
+    <div class="block">
+        <div class="about">
+            <EditForm Context="editContext" Model="BookManagerService.NewBook" class="form" OnValidSubmit="() => BookManagerService.AddBook(BookManagerService.NewBook)">
+                <FluentValidationValidator />
+                <ValidationSummary />
+                <div class="about__block">
+                    <div>
+                        <label class="about__block__label" for="Name">Имя</label>
+                    </div>
+                    <div>
+                        <InputText class="about__block__input" @bind-Value="BookManagerService.NewBook.Title"></InputText>
+                    </div>
+                </div>
+                <div class="about__block">
+                    <div>
+                        <label class="about__block__label" for="Description">Описание</label>
+                    </div>
+                    <div>
+                        <InputTextArea class="about__block__input" @bind-Value="BookManagerService.NewBook.Description"></InputTextArea>
+                    </div>
+                </div>
+                <div class="about__block">
+                    <div>
+                        <label class="about__block__label" for="Author">Автор</label>
+                    </div>
+                    <div>
+                        <InputNumber class="about__block__input" @bind-Value="BookManagerService.NewBook.AuthorId"></InputNumber>
+                    </div>
+                </div>
+                <div class="about__block">
+                    <div>
+                        <label class="about__block__label" for="Publisher">Издатель</label>
+                    </div>
+                    <div>
+                        <InputNumber class="about__block__input" @bind-Value="BookManagerService.NewBook.PublisherId"></InputNumber>
+                    </div>
+                </div>
+                <div class="about__block">
+                    <div>
+                        <label class="about__block__label" for="Genre">Жанр</label>
+                    </div>
+                    <div>
+                        <InputNumber class="about__block__input" @bind-Value="BookManagerService.NewBook.GenreId"></InputNumber>
+                    </div>
+                </div>
+                <div class="about__block">
+                    <div>
+                        <label class="about__block__label" for="Count">Кол-во</label>
+                    </div>
+                    <div>
+                        <InputNumber class="about__block__input" @bind-Value="BookManagerService.NewBook.Count"></InputNumber>
+                    </div>
+                </div>
+                <div class="about__block confirm-but">
+                    <div>
+                        <button type="submit">Добавить книгу</button>
+                    </div>
+                </div>
+            </EditForm>
+        </div>
+        <div class="about">
+            <EditForm Context="editContext2" Model="BookManagerService.NewAuthor" class="form" OnValidSubmit="() => BookManagerService.AddAuthor(BookManagerService.NewAuthor)">
+                <div class="about__block">
+                    <div>
+                        <label class="about__block__label" for="Name">Имя</label>
+                    </div>
+                    <div>
+                        <InputText class="about__block__input" @bind-Value="BookManagerService.NewAuthor.Name"></InputText>
+                    </div>
+                </div>
+                <div class="about__block">
+                    <div>
+                        <label class="about__block__label" for="Description">Описание</label>
+                    </div>
+                    <div>
+                        <InputText class="about__block__input" @bind-Value="BookManagerService.NewAuthor.Description"></InputText>
+                    </div>
+                </div>
+                <div class="about__block confirm-but">
+                    <div>
+                        <button type="submit">Добавить автора</button>
+                    </div>
+                </div>
+            </EditForm>
+        </div>
+        <div class="about">
+            <EditForm Context="editContext3" Model="BookManagerService.NewPublisher" class="form" OnValidSubmit="() => BookManagerService.AddPublisher(BookManagerService.NewPublisher)">
+                <div class="about__block">
+                    <div>
+                        <label class="about__block__label" for="Name">Название</label>
+                    </div>
+                    <div>
+                        <InputText class="about__block__input" @bind-Value="BookManagerService.NewPublisher.Name"></InputText>
+                    </div>
+                </div>
+                <div class="about__block">
+                    <div>
+                        <label class="about__block__label" for="Description">Описание</label>
+                    </div>
+                    <div>
+                        <InputText class="about__block__input" @bind-Value="BookManagerService.NewPublisher.Description"></InputText>
+                    </div>
+                </div>
+                <div class="about__block confirm-but">
+                    <div>
+                        <button type="submit">Добавить издателя</button>
+                    </div>
+                </div>
+            </EditForm>
+        </div>
+        <div class="about">
+            <EditForm Context="editContext4" Model="BookManagerService.NewGenre" class="form" OnValidSubmit="() => BookManagerService.AddGenre(BookManagerService.NewGenre)">
+                <div class="about__block">
+                    <div>
+                        <label class="about__block__label" for="Name">Имя</label>
+                    </div>
+                    <div>
+                        <InputText class="about__block__input" @bind-Value="BookManagerService.NewGenre.Name"></InputText>
+                    </div>
+                </div>
+                <div class="about__block">
+                    <div>
+                        <label class="about__block__label" for="Description">Описание</label>
+                    </div>
+                    <div>
+                        <InputText class="about__block__input" @bind-Value="BookManagerService.NewGenre.Description"></InputText>
+                    </div>
+                </div>
+                <div class="about__block confirm-but">
+                    <div>
+                        <button type="submit">Добавить жанр</button>
+                    </div>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+}

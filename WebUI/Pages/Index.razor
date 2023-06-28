@@ -1,0 +1,89 @@
+﻿@page "/"
+@inherits IndexModel
+
+@using Application.Interfaces;
+
+
+
+<AuthorizeView>
+
+    <Authorized>
+        <button @onclick="AuthProvider.Logout">Log out</button>
+    </Authorized>
+
+    <NotAuthorized>
+        <EditForm Context="editContext" Model="Admin" class="form" OnValidSubmit="() => Login(Admin)">
+            <div class="about__block">
+                <div>
+                    <label class="about__block__label" for="Name">Email</label>
+                </div>
+                <div>
+                    <InputText readonly class="about__block__input" @bind-Value="Admin.Email"></InputText>
+                </div>
+            </div>
+            <div class="about__block">
+                <div>
+                    <label class="about__block__label" for="Name">Password</label>
+                </div>
+                <div>
+                    <InputText readonly class="about__block__input" @bind-Value="Admin.Password"></InputText>
+                </div>
+            </div>
+            <div class="about__block confirm-but">
+                <div>
+                    <button type="submit">Вход</button>
+                </div>
+            </div>
+        </EditForm>
+        <hr />
+        <EditForm Context="editContext" Model="Libr" class="form" OnValidSubmit="() => Login(Libr)">
+            <div class="about__block">
+                <div>
+                    <label class="about__block__label" for="Name">Email</label>
+                </div>
+                <div>
+                    <InputText readonly class="about__block__input" @bind-Value="Libr.Email"></InputText>
+                </div>
+            </div>
+            <div class="about__block">
+                <div>
+                    <label class="about__block__label" for="Name">Password</label>
+                </div>
+                <div>
+                    <InputText readonly class="about__block__input" @bind-Value="Libr.Password"></InputText>
+                </div>
+            </div>
+            <div class="about__block confirm-but">
+                <div>
+                    <button type="submit">Вход</button>
+                </div>
+            </div>
+        </EditForm>
+        <hr />
+        <EditForm Context="editContext" Model="Client" class="form" OnValidSubmit="() => Login(Client)">
+            <div class="about__block">
+                <div>
+                    <label class="about__block__label" for="Name">Email</label>
+                </div>
+                <div>
+                    <InputText readonly class="about__block__input" @bind-Value="Client.Email"></InputText>
+                </div>
+            </div>
+            <div class="about__block">
+                <div>
+                    <label class="about__block__label" for="Name">Password</label>
+                </div>
+                <div>
+                    <InputText readonly class="about__block__input" @bind-Value="Client.Password"></InputText>
+                </div>
+            </div>
+            <hr />
+            <div class="about__block confirm-but">
+                <div>
+                    <button type="submit">Вход</button>
+                </div>
+            </div>
+        </EditForm>
+    </NotAuthorized>
+
+</AuthorizeView>

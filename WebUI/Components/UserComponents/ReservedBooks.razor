@@ -1,0 +1,51 @@
+﻿@page "/reservedbooks"
+@inherits ReservedBooksModel
+
+@using Microsoft.AspNetCore.Components.QuickGrid;
+
+<QuickGrid Items="ReserveDisplayService.TempReserves.AsQueryable()" Pagination="ReserveDisplayService.Pagination" @ref="ReserveDisplayService.Grid">
+    <PropertyColumn Property="c => c.Id" Sortable="true" IsDefaultSort="SortDirection.Ascending"></PropertyColumn>
+    <PropertyColumn Property="c => c.Book.Title.ToUpper()" Sortable="true" IsDefaultSort="SortDirection.Ascending" Title="Название"></PropertyColumn>
+    <PropertyColumn Property="c => c.Book.Description" Sortable="true" IsDefaultSort="SortDirection.Ascending" Title="Описание"></PropertyColumn>
+    <PropertyColumn Property="c => c.Canceling" Sortable="true" IsDefaultSort="SortDirection.Ascending" Title="До"></PropertyColumn>
+    <PropertyColumn Property="c => c.Book.Author.Name" Sortable="true" IsDefaultSort="SortDirection.Ascending" Title="Автор">
+        <ColumnOptions>
+            @foreach (var item in ReserveDisplayService.Authors)
+            {
+                <div>
+                    <input type="checkbox" @bind="item.IsChoised" @bind:after="ReserveDisplayService.UpdateGrid" />
+                    <label>@item.Name</label>
+                </div>
+            }
+            <label @onclick="ReserveDisplayService.ResetGrid">Сброс</label>
+        </ColumnOptions>
+    </PropertyColumn>
+    <PropertyColumn Property="c => c.Book.Genre.Name" Sortable="true" IsDefaultSort="SortDirection.Ascending" Title="Жанр">
+        <ColumnOptions>
+            @foreach (var item in ReserveDisplayService.Genres)
+            {
+                <div>
+                    <input type="checkbox" @bind="item.IsChoised" @bind:after="ReserveDisplayService.UpdateGrid" />
+                    <label>@item.Name</label>
+                </div>
+            }
+            <label @onclick="ReserveDisplayService.ResetGrid">Сброс</label>
+        </ColumnOptions>
+    </PropertyColumn>
+    <PropertyColumn Property="c => c.Book.Publisher.Name" Sortable="true" IsDefaultSort="SortDirection.Ascending" Title="Издатель">
+        <ColumnOptions>
+            @foreach (var item in ReserveDisplayService.Publishers)
+            {
+                <div>
+                    <input type="checkbox" @bind="item.IsChoised" @bind:after="ReserveDisplayService.UpdateGrid" />
+                    <label>@item.Name</label>
+                </div>
+            }
+            <label @onclick="ReserveDisplayService.ResetGrid">Сброс</label>
+        </ColumnOptions>
+    </PropertyColumn>
+    <TemplateColumn Align="Align.Center" Title="Actions">
+        <button @onclick="() => ReserveManagerService.DoUnreserve(context)">Убрать бронь</button>
+    </TemplateColumn>
+</QuickGrid>
+<Paginator Value="ReserveDisplayService.Pagination" />
