@@ -4,13 +4,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Features.Reserves.Commands.DoUnreserve
 {
-    public class DoUnreserveCommandHandle : IRequestHandler<DoUnreserveCommand, int>
+    internal class DoUnreserveCommandHandler : IRequestHandler<DoUnreserveCommand, int>
     {
         private readonly IAppDbContext context;
-        public DoUnreserveCommandHandle(IAppDbContext dbContext)
+
+        public DoUnreserveCommandHandler(IAppDbContext dbContext)
         {
             context = dbContext;
         }
+
         async public Task<int> Handle(DoUnreserveCommand request, CancellationToken cancellationToken)
         {
             var reserve = await context.Reserves.FirstAsync(c => c.Id == request.Reserve.Id && c.UserId == request.Reserve.UserId, cancellationToken);

@@ -8,7 +8,6 @@ namespace Persistence.Planner.Jobs
     {
         protected readonly IServiceScopeFactory serviceScopeFactory;
 
-
         public JobFactory(IServiceScopeFactory serviceScopeFactory)
         {
             this.serviceScopeFactory = serviceScopeFactory;
@@ -21,9 +20,7 @@ namespace Persistence.Planner.Jobs
                 var job = scope.ServiceProvider.GetService(bundle.JobDetail.JobType) as IJob;
                 return job;
             }
-
         }
-
         public void ReturnJob(IJob job)
         {
             //Do something if need

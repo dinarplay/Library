@@ -5,13 +5,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Features.Reserves.Commands.DoReserve
 {
-    public class DoReserveCommandHandler : IRequestHandler<DoReserveCommand, int>
+    internal class DoReserveCommandHandler : IRequestHandler<DoReserveCommand, int>
     {
         private readonly IAppDbContext context;
+
         public DoReserveCommandHandler(IAppDbContext dbContext)
         {
             context = dbContext;
         }
+
         async public Task<int> Handle(DoReserveCommand request, CancellationToken cancellationToken)
         {
             var reserves = await context.Reserves.FirstOrDefaultAsync(c => c.BookId == request.Reserve.Book.Id && c.UserId == request.Reserve.User.Id && c.IsDone == false, cancellationToken);

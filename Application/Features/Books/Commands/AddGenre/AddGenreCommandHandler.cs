@@ -3,13 +3,15 @@ using MediatR;
 
 namespace Application.Features.Books.Commands.AddGenre
 {
-    public class AddGenreCommandHandler : IRequestHandler<AddGenreCommand, int>
+    internal class AddGenreCommandHandler : IRequestHandler<AddGenreCommand, int>
     {
         private readonly IAppDbContext context;
+
         public AddGenreCommandHandler(IAppDbContext dbContext)
         {
             this.context = dbContext;
         }
+
         async public Task<int> Handle(AddGenreCommand request, CancellationToken cancellationToken)
         {
             var genre = request.Genre;

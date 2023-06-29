@@ -18,6 +18,7 @@ namespace WebUI
             services.AddTransient<IReserveDisplay, ReserveDisplayService>();
 
             services.AddTransient<IDataManager, DataManagerService>();
+
             return services;
         }
     }

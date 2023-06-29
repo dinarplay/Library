@@ -4,13 +4,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Features.Users.Commands.DeleteUser
 {
-    public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, int>
+    internal class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, int>
     {
         private readonly IAppDbContext context;
+
         public DeleteUserCommandHandler(IAppDbContext dbContext)
         {
             this.context = dbContext;
         }
+
         public async Task<int> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
         {
             var user = await context.Users.FirstAsync(c => c.Id == request.User.Id, cancellationToken);

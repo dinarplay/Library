@@ -8,7 +8,7 @@
 <AuthorizeView>
 
     <Authorized>
-        <button @onclick="AuthProvider.Logout">Log out</button>
+        <button @onclick="AuthProvider.LogoutAsync">Log out</button>
     </Authorized>
 
     <NotAuthorized>
@@ -18,7 +18,7 @@
                     <label class="about__block__label" for="Name">Email</label>
                 </div>
                 <div>
-                    <InputText readonly class="about__block__input" @bind-Value="Admin.Email"></InputText>
+                    <InputText class="about__block__input" @bind-Value="Admin.Email"></InputText>
                 </div>
             </div>
             <div class="about__block">
@@ -26,7 +26,7 @@
                     <label class="about__block__label" for="Name">Password</label>
                 </div>
                 <div>
-                    <InputText readonly class="about__block__input" @bind-Value="Admin.Password"></InputText>
+                    <InputText class="about__block__input" @bind-Value="Admin.Password"></InputText>
                 </div>
             </div>
             <div class="about__block confirm-but">
@@ -77,10 +77,41 @@
                     <InputText readonly class="about__block__input" @bind-Value="Client.Password"></InputText>
                 </div>
             </div>
-            <hr />
             <div class="about__block confirm-but">
                 <div>
                     <button type="submit">Вход</button>
+                </div>
+            </div>
+        </EditForm>
+        <hr />
+        <EditForm Context="editContext" Model="NewUser" class="form" OnValidSubmit="() => AuthProvider.SignupAsync(NewUser)">
+            <div class="about__block">
+                <div>
+                    <label class="about__block__label" for="Name">Name</label>
+                </div>
+                <div>
+                    <InputText class="about__block__input" @bind-Value="NewUser.Name"></InputText>
+                </div>
+            </div>
+            <div class="about__block">
+                <div>
+                    <label class="about__block__label" for="Name">Email</label>
+                </div>
+                <div>
+                    <InputText class="about__block__input" @bind-Value="NewUser.Email"></InputText>
+                </div>
+            </div>
+            <div class="about__block">
+                <div>
+                    <label class="about__block__label" for="Name">Password</label>
+                </div>
+                <div>
+                    <InputText class="about__block__input" @bind-Value="NewUser.Password"></InputText>
+                </div>
+            </div>
+            <div class="about__block confirm-but">
+                <div>
+                    <button type="submit">Регистрация</button>
                 </div>
             </div>
         </EditForm>

@@ -3,13 +3,15 @@ using MediatR;
 
 namespace Application.Features.Books.Commands.AddAuthor
 {
-    public class AddAuthorCommandHandle : IRequestHandler<AddAuthorCommand, int>
+    internal class AddAuthorCommandHandler : IRequestHandler<AddAuthorCommand, int>
     {
         private readonly IAppDbContext context;
-        public AddAuthorCommandHandle(IAppDbContext dbContext)
+
+        public AddAuthorCommandHandler(IAppDbContext dbContext)
         {
             this.context = dbContext;
         }
+
         async public Task<int> Handle(AddAuthorCommand request, CancellationToken cancellationToken)
         {
             var author = request.Author;

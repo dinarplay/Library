@@ -6,9 +6,9 @@ namespace WebUI.Interfaces
     {
         User CurrentUser { get; set; }
         User NewUser { get; set; }
-        Task ChangeUser(User user);
-        Task AddUser(User user);
-        Task DeleteUser(User user);
+        Task ChangeUserAsync(User user);
+        Task AddUserAsync(User user);
+        Task DeleteUserAsync(User user);
         void CallChangeMenu(User user);
         void CallAddMenu();
         string SearchText { get; set; }

@@ -9,15 +9,15 @@ namespace Persistence.Auth
     public class AuthProviderService : AuthenticationStateProvider, IAuthProvider, IDisposable 
     {
         public User CurrentUser { get; set; } = new();
+
         //DI
-        public readonly IDataManager DataManagerService;
-        public readonly NavigationManager NavigationManager;
-        public AuthProviderService(IDataManager DataManagerService, NavigationManager NavigationManager)
+        private readonly IDataManager DataManagerService;
+        public AuthProviderService(IDataManager dataManagerService)
         {
-            this.DataManagerService = DataManagerService;
-            this.NavigationManager = NavigationManager;
+            this.DataManagerService = dataManagerService;
             AuthenticationStateChanged += OnAuthenticationStateChangedAsync;
         }
+
         public void Dispose()
         {
             AuthenticationStateChanged -= OnAuthenticationStateChangedAsync;
@@ -33,49 +33,51 @@ namespace Persistence.Auth
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
             var principal = new ClaimsPrincipal();
-            var user = await DataManagerService.FindUserInBrowser();
+            var user = await DataManagerService.FindUserInBrowserAsync();
             if (user != null)
             {
-                var userInDataBase = await DataManagerService.FindUserInDatabase(user.Email, user.Password);
-                if (userInDataBase != null)
+                var userInDataBase = await DataManagerService.FindUserInDatabaseAsync(user.Email);
+                if (userInDataBase != null && user.Password == userInDataBase.Password)
                 {
-                    CurrentUser = userInDataBase;
                     principal = userInDataBase.ToClaimsPrincipal();
+                    CurrentUser = userInDataBase;
                 }
             }
             var authState = new AuthenticationState(principal);
             return authState;
-            }
-        async public Task Login(string email, string password)
+        }
+        public async Task LoginAsync(string email, string password)
         {
             var principal = new ClaimsPrincipal();
-            var user = await DataManagerService.FindUserInDatabase(email, password);
-            if (user != null)
+            var user = await DataManagerService.FindUserInDatabaseAsync(email);
+            if (user != null && user.CheckPassword(password))
             {
-                CurrentUser = user;
-                await DataManagerService.AddUserToBrowser(user);
+                await DataManagerService.AddUserToBrowserAsync(user);
                 principal = user.ToClaimsPrincipal();
+                CurrentUser = user;
             }
             var authState = new AuthenticationState(principal);
             NotifyAuthenticationStateChanged(Task.FromResult(authState));
         }
-        async public Task Signup(User sendUser)
+        public async Task SignupAsync(User user)
         {
             var principal = new ClaimsPrincipal();
-            var foundUser = await DataManagerService.FindUserInDatabase(sendUser.Email, sendUser.Password);
+            var foundUser = await DataManagerService.FindUserInDatabaseAsync(user.Email);
             if (foundUser is null)
             {
-                CurrentUser = foundUser;
-                await DataManagerService.AddUserToDatabase(sendUser);
-                await DataManagerService.AddUserToBrowser(sendUser);
-                principal = sendUser.ToClaimsPrincipal();
+                user.RoleId = 2;
+                user.Password = User.SetPassword(user.Password);
+                await DataManagerService.AddUserToDatabaseAsync(user);
+                await DataManagerService.AddUserToBrowserAsync(user);
+                principal = user.ToClaimsPrincipal();
+                CurrentUser = user;
             }
             var authState = new AuthenticationState(principal);
             NotifyAuthenticationStateChanged(Task.FromResult(authState));
         }
-        async public Task Logout()
+        public async Task LogoutAsync()
         {
-            await DataManagerService.ClearBrowserUserData();
+            await DataManagerService.ClearBrowserUserDataAsync();
             var principal = new ClaimsPrincipal();
             var authState = new AuthenticationState(principal);
             NotifyAuthenticationStateChanged(Task.FromResult(authState));

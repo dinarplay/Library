@@ -8,7 +8,7 @@ namespace Persistence.EntityTypeConfigurations
     {
         public void Configure(EntityTypeBuilder<Author> builder)
         {
-            builder.Ignore(x => x.IsChoised);
+            builder.ToTable("Authors").Ignore(x => x.IsChoised);
         }
     }
 }

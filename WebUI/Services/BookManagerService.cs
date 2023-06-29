@@ -19,33 +19,34 @@ namespace WebUI.Services
         public bool IsShowAddMenu { get; set; }
 
         //DI
-        public IMediator Mediator { get; set; }
-        public NavigationManager NavigationManager { get; set; }
-        public BookManagerService(IMediator Mediator, NavigationManager NavigationManager)
+        private IMediator Mediator { get; set; }
+        private NavigationManager NavigationManager { get; set; }
+        public BookManagerService(IMediator mediator, NavigationManager navigationManager)
         {
-            this.Mediator = Mediator;
-            this.NavigationManager = NavigationManager;
+            this.Mediator = mediator;
+            this.NavigationManager = navigationManager;
         }        
-        public async Task DeleteBook(Book book)
+
+        public async Task DeleteBookAsync(Book book)
         {
             await Mediator.Send(new DeleteBookCommand() { Id = book.Id });
             NavigationManager.NavigateTo(NavigationManager.Uri, true);
         }
-        public async Task AddBook(Book book)
+        public async Task AddBookAsync(Book book)
         {
             await Mediator.Send(new AddBookCommand() { Book = book });
         }
-        public async Task AddGenre(Genre Genre)
+        public async Task AddGenreAsync(Genre genre)
         {
-            await Mediator.Send(new AddGenreCommand() { Genre = Genre });
+            await Mediator.Send(new AddGenreCommand() { Genre = genre });
         }
-        public async Task AddAuthor(Author Author)
+        public async Task AddAuthorAsync(Author author)
         {
-            await Mediator.Send(new AddAuthorCommand() { Author = Author });
+            await Mediator.Send(new AddAuthorCommand() { Author = author });
         }
-        public async Task AddPublisher(Publisher Publisher)
+        public async Task AddPublisherAsync(Publisher publisher)
         {
-            await Mediator.Send(new AddPublisherCommand() { Publisher = Publisher });
+            await Mediator.Send(new AddPublisherCommand() { Publisher = publisher });
         }
 
         public void CallAddMenu()

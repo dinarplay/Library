@@ -10,13 +10,13 @@ namespace Persistence
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
+        public async static Task<IServiceCollection> AddPersistence(this IServiceCollection services, IConfiguration configuration)
         {
             var connectionString = configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<IAppDbContext, AppDbContext>(options =>
             {
-                options.UseNpgsql(connectionString, c => c.MigrationsAssembly("WebUI"));
-                //options.UseSqlServer(connectionString, c => c.MigrationsAssembly("WebUI"));
+                //options.UseNpgsql(connectionString, c => c.MigrationsAssembly("WebUI"));
+                options.UseSqlServer(connectionString, c => c.MigrationsAssembly("WebUI"));
             });
 
             services.AddScoped<IAuthProvider, AuthProviderService>();
@@ -25,7 +25,9 @@ namespace Persistence
 
             services.AddTransient<JobFactory>();
             services.AddScoped<DateChecker>();
-            services.AddScoped<DateSheduler>();
+            services.AddScoped<DateSheduler>(); 
+            await DateSheduler.StartAsync(services.BuildServiceProvider());
+
             return services;
         }
     }

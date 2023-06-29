@@ -10,9 +10,10 @@ namespace WebUI.Components.UserComponents
         public IReserveManager ReserveManagerService { get; set; }
         [Inject]
         public IBookDisplay BookDisplayService { get; set; }
+
         protected async override Task OnInitializedAsync()
         {
-            await BookDisplayService.GetGrid();
+            await BookDisplayService.GetGridAsync();
         }
     }
 }

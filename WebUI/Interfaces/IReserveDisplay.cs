@@ -11,6 +11,6 @@ namespace WebUI.Interfaces
         List<Genre> Genres { get; set; }
         List<Author> Authors { get; set; }
         List<Publisher> Publishers { get; set; }
-        Task GetGridAtUser();
+        Task GetGridAtUserAsync();
     }
 }

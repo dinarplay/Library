@@ -10,9 +10,10 @@ namespace WebUI.Components.AdminComponents
         public IUserManager UserManagerService { get; set; }
         [Inject]
         public IUserDisplay UserDisplayService { get; set; }
+
         protected async override Task OnInitializedAsync()
         {
-            await UserDisplayService.GetGrid();
+            await UserDisplayService.GetGridAsync();
         }
     }
 }

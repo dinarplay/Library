@@ -8,9 +8,7 @@ namespace Persistence.EntityTypeConfigurations
     {
         public void Configure(EntityTypeBuilder<Book> builder)
         {
-            builder.HasKey(x => x.Id);
-            builder.HasIndex(x => x.Id).IsUnique();
-            builder.Property(x => x.Title).HasMaxLength(250);
+            builder.ToTable("Books").Property(x => x.Title).HasMaxLength(250);
         }
     }
 }

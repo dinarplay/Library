@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Features.Books.Commands.UpdateBook
 {
-    public class UpdateBookCommandHandler : IRequestHandler<UpdateBookCommand, int>
+    internal class UpdateBookCommandHandler : IRequestHandler<UpdateBookCommand, int>
     {
         private readonly IAppDbContext context;
         public UpdateBookCommandHandler(IAppDbContext dbContext)

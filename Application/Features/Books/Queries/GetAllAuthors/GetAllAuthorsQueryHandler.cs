@@ -5,13 +5,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Features.Books.Queries.GetAllAuthors
 {
-    public class GetAllAuthorsQueryHandler : IRequestHandler<GetAllAuthorsQuery, List<Author>>
+    internal class GetAllAuthorsQueryHandler : IRequestHandler<GetAllAuthorsQuery, List<Author>>
     {
         private readonly IAppDbContext context;
+
         public GetAllAuthorsQueryHandler(IAppDbContext dbContext)
         {
             context = dbContext;
         }
+
         async public Task<List<Author>> Handle(GetAllAuthorsQuery request, CancellationToken cancellationToken)
         {
             var authors = await context.Authors.ToListAsync();

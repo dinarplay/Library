@@ -9,9 +9,10 @@ namespace WebUI.Components.LibrarianComponents
         public IReserveManager ReserveManagerService { get; set; }
         [Inject]
         public IReserveDisplay ReserveDisplayService { get; set; }
+
         protected async override Task OnInitializedAsync()
         {
-            await ReserveDisplayService.GetGrid();
+            await ReserveDisplayService.GetGridAsync();
         }
     }
 }

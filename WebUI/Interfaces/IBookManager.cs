@@ -8,11 +8,11 @@ namespace WebUI.Interfaces
         Genre NewGenre {  get; set; }
         Author NewAuthor {  get; set; }
         Publisher NewPublisher {  get; set; }
-        Task DeleteBook(Book book); 
-        Task AddBook(Book book); 
-        Task AddGenre(Genre genre); 
-        Task AddPublisher(Publisher publisher); 
-        Task AddAuthor(Author author); 
+        Task DeleteBookAsync(Book book); 
+        Task AddBookAsync(Book book); 
+        Task AddGenreAsync(Genre genre); 
+        Task AddPublisherAsync(Publisher publisher); 
+        Task AddAuthorAsync(Author author); 
         bool IsShowAddMenu { get; set; }
         void CallAddMenu();
     }

@@ -19,11 +19,11 @@
             @foreach (var item in ReserveDisplayService.Authors)
             {
                 <div>
-                    <input type="checkbox" @bind="item.IsChoised" @bind:after="ReserveDisplayService.UpdateGrid" />
+                    <input type="checkbox" @bind="item.IsChoised" @bind:after="ReserveDisplayService.UpdateGridAsync" />
                     <label>@item.Name</label>
                 </div>
             }
-            <label @onclick="ReserveDisplayService.ResetGrid">Сброс</label>
+            <label @onclick="ReserveDisplayService.ResetGridAsync">Сброс</label>
         </ColumnOptions>
     </PropertyColumn>
     <PropertyColumn Property="c => c.Book.Genre.Name" Sortable="true" IsDefaultSort="SortDirection.Ascending" Title="Жанр">
@@ -31,11 +31,11 @@
             @foreach (var item in ReserveDisplayService.Genres)
             {
                 <div>
-                    <input type="checkbox" @bind="item.IsChoised" @bind:after="ReserveDisplayService.UpdateGrid" />
+                    <input type="checkbox" @bind="item.IsChoised" @bind:after="ReserveDisplayService.UpdateGridAsync" />
                     <label>@item.Name</label>
                 </div>
             }
-            <label @onclick="ReserveDisplayService.ResetGrid">Сброс</label>
+            <label @onclick="ReserveDisplayService.ResetGridAsync">Сброс</label>
         </ColumnOptions>
     </PropertyColumn>
     <PropertyColumn Property="c => c.Book.Publisher.Name" Sortable="true" IsDefaultSort="SortDirection.Ascending" Title="Издатель">
@@ -43,18 +43,18 @@
             @foreach (var item in ReserveDisplayService.Publishers)
             {
                 <div>
-                    <input type="checkbox" @bind="item.IsChoised" @bind:after="ReserveDisplayService.UpdateGrid" />
+                    <input type="checkbox" @bind="item.IsChoised" @bind:after="ReserveDisplayService.UpdateGridAsync" />
                     <label>@item.Name</label>
                 </div>
             }
-            <label @onclick="ReserveDisplayService.ResetGrid">Сброс</label>
+            <label @onclick="ReserveDisplayService.ResetGridAsync">Сброс</label>
         </ColumnOptions>
     </PropertyColumn>
     <TemplateColumn Align="Align.Center" Title="Actions">
-        <button @onclick="() => ReserveManagerService.GiveReserve(context)">Give</button>
+        <button @onclick="() => ReserveManagerService.GiveReserveAsync(context)">Give</button>
     </TemplateColumn>
     <TemplateColumn Align="Align.Center" Title="Actions">
-        <button @onclick="() => ReserveManagerService.TakeReserve(context)">Take</button>
+        <button @onclick="() => ReserveManagerService.TakeReserveAsync(context)">Take</button>
     </TemplateColumn>
 </QuickGrid>
 <Paginator Value="ReserveDisplayService.Pagination" />

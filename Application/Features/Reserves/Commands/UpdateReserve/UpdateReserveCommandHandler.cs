@@ -4,13 +4,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Features.Reserves.Commands.UpdateReserve
 {
-    public class UpdateReserveCommandHandler : IRequestHandler<UpdateReserveCommand, int>
+    internal class UpdateReserveCommandHandler : IRequestHandler<UpdateReserveCommand, int>
     {
         private readonly IAppDbContext context;
+
         public UpdateReserveCommandHandler(IAppDbContext dbContext)
         {
             context = dbContext;
         }
+
         async public Task<int> Handle(UpdateReserveCommand request, CancellationToken cancellationToken)
         {
             var reserves = await context.Reserves.ToListAsync();
@@ -25,7 +27,6 @@ namespace Application.Features.Reserves.Commands.UpdateReserve
             }
             await context.SaveChangesAsync(cancellationToken);
             return reserves.First().Id;
-            //tot yt ljitk
         }
     }
 }

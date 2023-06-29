@@ -26,15 +26,15 @@ namespace WebUI.Services
         public PaginationState Pagination { get; set; } = new() { ItemsPerPage = 10 };
 
         //DI
-        public IMediator Mediator { get; set; }
-        public IAuthProvider AuthProvider { get; set; }
-
-        public ReserveDisplayService(IMediator Mediator, IAuthProvider AuthProvider)
+        private IMediator Mediator { get; set; }
+        private IAuthProvider AuthProvider { get; set; }
+        public ReserveDisplayService(IMediator mediator, IAuthProvider authProvider)
         {
-            this.Mediator = Mediator;
-            this.AuthProvider = AuthProvider;
+            this.Mediator = mediator;
+            this.AuthProvider = authProvider;
         }
-        public async Task GetGrid()
+
+        public async Task GetGridAsync()
         {
             Books = await Mediator.Send(new GetAllBooksQuery());
             Genres = await Mediator.Send(new GetAllGenresQuery());
@@ -44,21 +44,21 @@ namespace WebUI.Services
             Reserves = await Mediator.Send(new GetAllReservesQuery());
             TempReserves = Reserves;
         }
-        public async Task ResetGrid()
+        public async Task ResetGridAsync()
         {
-            Genres.Select(c => c.IsChoised = true).ToList();
-            Publishers.Select(c => c.IsChoised = true).ToList();
-            Authors.Select(c => c.IsChoised = true).ToList();
+            Genres.ForEach(c => c.IsChoised = true);
+            Publishers.ForEach(c => c.IsChoised = true);
+            Authors.ForEach(c => c.IsChoised = true);
             await Grid.RefreshDataAsync();
         }
-        public async Task UpdateGrid()
+        public async Task UpdateGridAsync()
         {
-            TempReserves = Reserves.Where(c => c.Book.Author.IsChoised == true).ToList();
-            TempReserves = TempReserves.Where(c => c.Book.Genre.IsChoised == true).ToList();
-            TempReserves = TempReserves.Where(c => c.Book.Publisher.IsChoised == true).ToList();
+            TempReserves = Reserves.Where(c => c.Book.Author.IsChoised).ToList();
+            TempReserves = TempReserves.Where(c => c.Book.Genre.IsChoised).ToList();
+            TempReserves = TempReserves.Where(c => c.Book.Publisher.IsChoised).ToList();
             await Grid.RefreshDataAsync();
         }
-        public async Task GetGridAtUser()
+        public async Task GetGridAtUserAsync()
         {
             Books = await Mediator.Send(new GetAllBooksQuery());
             Genres = await Mediator.Send(new GetAllGenresQuery());

@@ -15,11 +15,11 @@
             @foreach (var item in UserDisplayService.Roles)
             {
             <div>
-                    <input type="checkbox" @bind="item.IsChoised" @bind:after="UserDisplayService.UpdateGrid" />
+                    <input type="checkbox" @bind="item.IsChoised" @bind:after="UserDisplayService.UpdateGridAsync" />
             <label>@item.Name</label>
             </div>
             }
-            <label @onclick="UserDisplayService.ResetGrid">Сброс</label>
+            <label @onclick="UserDisplayService.ResetGridAsync">Сброс</label>
         </ColumnOptions>
     </PropertyColumn>
 
@@ -29,7 +29,7 @@
         <button @onclick="() => UserManagerService.CallChangeMenu(context)">Edit</button>
     </TemplateColumn>
     <TemplateColumn Align="Align.Center" Title="Actions">
-        <button @onclick="() => UserManagerService.DeleteUser(context)">Delete</button>
+        <button @onclick="() => UserManagerService.DeleteUserAsync(context)">Delete</button>
     </TemplateColumn>
 </QuickGrid>
 <Paginator Value="UserDisplayService.Pagination" />
@@ -37,7 +37,7 @@
 @if (UserManagerService.IsShowChangeMenu)
 {
     <div class="about">
-        <EditForm Context="editContext1" Model="UserManagerService.CurrentUser" class="form" OnValidSubmit="() => UserManagerService.ChangeUser(UserManagerService.CurrentUser)">
+        <EditForm Context="editContext1" Model="UserManagerService.CurrentUser" class="form" OnValidSubmit="() => UserManagerService.ChangeUserAsync(UserManagerService.CurrentUser)">
             <FluentValidationValidator />
             <ValidationSummary />
             <div class="about__block">
@@ -85,7 +85,7 @@
 @if (UserManagerService.IsShowAddMenu)
 {
     <div class="about">
-        <EditForm Context="editContext2" Model="UserManagerService.NewUser" class="form" OnValidSubmit="() => UserManagerService.AddUser(UserManagerService.NewUser)">
+        <EditForm Context="editContext2" Model="UserManagerService.NewUser" class="form" OnValidSubmit="() => UserManagerService.AddUserAsync(UserManagerService.NewUser)">
             <FluentValidationValidator />
             <ValidationSummary />
             <div class="about__block">

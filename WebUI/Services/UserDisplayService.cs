@@ -16,27 +16,27 @@ namespace WebUI.Services
         public PaginationState Pagination { get; set; } = new() { ItemsPerPage = 10 };
 
         //DI
-        public IMediator Mediator { get; set; }
-
-        public UserDisplayService(IMediator Mediator)
+        private IMediator Mediator { get; set; }
+        public UserDisplayService(IMediator mediator)
         {
-            this.Mediator = Mediator;
+            this.Mediator = mediator;
         }
-        public async Task GetGrid()
+
+        public async Task GetGridAsync()
         {
             Roles = await Mediator.Send(new GetAllRolesQuery());
             Users = await Mediator.Send(new GetAllUsersQuery());
             TempUsers = Users;
         }
-        public async Task ResetGrid()
+        public async Task ResetGridAsync()
         {
-            Roles.Select(c => c.IsChoised = true).ToList();
+            Roles.ForEach(c => c.IsChoised = true);
             TempUsers = Users;
             await Grid.RefreshDataAsync();
         }
-        public async Task UpdateGrid()
+        public async Task UpdateGridAsync()
         {
-            TempUsers = Users.Where(c => c.Role.IsChoised == true).ToList();
+            TempUsers = Users.Where(c => c.Role.IsChoised).ToList();
             await Grid.RefreshDataAsync();
         }
     }

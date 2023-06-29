@@ -11,6 +11,7 @@ namespace Domain
         public int RoleId { get; set; }
         public Role Role { get; set; }
         public List<Reserve> ReservedBooks { get; set; }
+
         public ClaimsPrincipal ToClaimsPrincipal() //Конвертировать текущего User'а в ClaimPrincipal
         {
             var claims = new Claim[]
@@ -36,6 +37,15 @@ namespace Domain
                 Id = Convert.ToInt32(principal.FindFirst("Id")?.Value ?? "0"),
             };
             return user;
+        }
+        public static string SetPassword(string password)
+        {
+            var hashedPass = BCrypt.Net.BCrypt.HashPassword(password);
+            return hashedPass;
+        }
+        public bool CheckPassword(string password)
+        {
+            return BCrypt.Net.BCrypt.Verify(password, Password);
         }
     }
 }

@@ -9,30 +9,12 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 
 
-builder.Services.AddApplication();
-builder.Services.AddPersistence(builder.Configuration);
-builder.Services.AddPresentation();
-//DbInitializer.Initialize();
+await builder.Services.AddApplication().AddPresentation().AddPersistence(builder.Configuration);
 
+//DbInitializer.Initialize();
 // builder.Services.AddCors();
 
-
-
 var app = builder.Build();
-
-using (var scope = app.Services.CreateScope())
-{
-    var serviceProvider = scope.ServiceProvider;
-    try
-    {
-        Persistence.Planner.Jobs.DateSheduler.Start(serviceProvider);
-    }
-    catch (Exception)
-    {
-        throw;
-    }
-}
-
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

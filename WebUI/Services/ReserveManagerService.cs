@@ -13,29 +13,29 @@ namespace WebUI.Services
     public class ReserveManagerService : IReserveManager
     {
         //DI
-        public IMediator Mediator { get; set; }
-        public NavigationManager NavigationManager { get; set; }
-        public IAuthProvider AuthProvider { get; set; }
-
-        public ReserveManagerService(IMediator Mediator, NavigationManager NavigationManager, IAuthProvider AuthProvider)
+        private IMediator Mediator { get; set; }
+        private IAuthProvider AuthProvider { get; set; }
+        private NavigationManager NavigationManager { get; set; }
+        public ReserveManagerService(IMediator mediator, NavigationManager navigationManager, IAuthProvider authProvider)
         {
-            this.Mediator = Mediator;
-            this.NavigationManager = NavigationManager;
-            this.AuthProvider = AuthProvider;
+            this.Mediator = mediator;
+            this.NavigationManager = navigationManager;
+            this.AuthProvider = authProvider;
         }
-        public async Task GiveReserve(Reserve reserve)
+
+        public async Task GiveReserveAsync(Reserve reserve)
         {
             await Mediator.Send(new GiveReserveCommand() { Reserve = reserve });
         }
-        public async Task TakeReserve(Reserve reserve)
+        public async Task TakeReserveAsync(Reserve reserve)
         {
             await Mediator.Send(new TakeReserveCommand() { Reserve = reserve });
         }
-        public async Task DoReserve(Book book)
+        public async Task DoReserveAsync(Book book)
         {
             await Mediator.Send(new DoReserveCommand() { Reserve = new() { Book = book, User = AuthProvider.CurrentUser }});
         }
-        public async Task DoUnreserve(Reserve reserve)
+        public async Task DoUnreserveAsync(Reserve reserve)
         {
             await Mediator.Send(new DoUnreserveCommand() { Reserve = reserve });
             NavigationManager.NavigateTo(NavigationManager.Uri, true);

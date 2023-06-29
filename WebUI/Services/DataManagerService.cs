@@ -1,5 +1,5 @@
 ﻿using Application.Features.Users.Commands.AddUser;
-using Application.Features.Users.Queries.GetAllUsers;
+using Application.Features.Users.Queries.GetUserByEmail;
 using Application.Interfaces;
 using Domain;
 using MediatR;
@@ -10,23 +10,25 @@ namespace WebUI.Services
 {
     public class DataManagerService : IDataManager
     {
+        //DI
         private readonly ProtectedLocalStorage ProtectedLocalStorage;
         private readonly IMediator Mediator;
-        public DataManagerService(ProtectedLocalStorage protectedLocalStorage, IMediator Mediator)
+        public DataManagerService(ProtectedLocalStorage protectedLocalStorage, IMediator mediator)
         {
             this.ProtectedLocalStorage = protectedLocalStorage;
-            this.Mediator = Mediator;
+            this.Mediator = mediator;
         }
-        async public Task AddUserToBrowser(User user) //Сохранение текущего пользоваетеля в хранилище браузера
+
+        public async Task AddUserToBrowserAsync(User user) //Сохранение текущего пользоваетеля в хранилище браузера
         {
             string userJson = JsonConvert.SerializeObject(user);
             await ProtectedLocalStorage.SetAsync("AuthUser", userJson);
         }
-        async public Task AddUserToDatabase(User user) //Регистрация нового пользователя
+        public async Task AddUserToDatabaseAsync(User user) //Регистрация нового пользователя
         {
             await Mediator.Send(new AddUserCommand() { User = user });
         }
-        async public Task<User?> FindUserInBrowser() //Получение данных пользователя из хранилища браузера
+        public async Task<User?> FindUserInBrowserAsync() //Получение данных пользователя из хранилища браузера
         {
             try
             {
@@ -40,13 +42,12 @@ namespace WebUI.Services
             catch (Exception) { }
             return null;
         }
-        async public Task<User?> FindUserInDatabase(string email, string password   ) //Поиск пользователя в БД
+        public async Task<User?> FindUserInDatabaseAsync(string email) //Поиск пользователя в БД
         {
-            var allUsers = await Mediator.Send(new GetAllUsersQuery());
-            var foundedUser = allUsers.FirstOrDefault(c => c.Password == password && c.Email == email);
+            var foundedUser = await Mediator.Send(new GetUserByEmailQuery() { Email = email });
             return foundedUser;
         }
-        async public Task ClearBrowserUserData() //Удаление данных пользователя из хранилища браузера
+        public async Task ClearBrowserUserDataAsync() //Удаление данных пользователя из хранилища браузера
         {
             await ProtectedLocalStorage.DeleteAsync("AuthUser");
         }

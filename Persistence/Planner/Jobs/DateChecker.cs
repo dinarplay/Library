@@ -9,10 +9,11 @@ namespace Persistence.Planner.Jobs
     {
         private readonly IServiceScopeFactory ServiceScopeFactory;
 
-        public DateChecker(IServiceScopeFactory ServiceScopeFactory)
+        public DateChecker(IServiceScopeFactory serviceScopeFactory)
         {
-            this.ServiceScopeFactory = ServiceScopeFactory;
+            this.ServiceScopeFactory = serviceScopeFactory;
         }
+
         public async Task Execute(IJobExecutionContext context)
         {
             using (var scope = ServiceScopeFactory.CreateScope())

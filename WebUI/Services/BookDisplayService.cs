@@ -20,12 +20,13 @@ namespace WebUI.Services
         public PaginationState Pagination { get; set; } = new PaginationState() { ItemsPerPage = 10 };
 
         //DI
-        public IMediator Mediator { get; set; }
-        public BookDisplayService(IMediator Mediator)
+        private IMediator Mediator { get; set; }
+        public BookDisplayService(IMediator mediator)
         {
-            this.Mediator = Mediator;
+            this.Mediator = mediator;
         }
-        public async Task GetGrid()
+
+        public async Task GetGridAsync()
         {
             Genres = await Mediator.Send(new GetAllGenresQuery());
             Authors = await Mediator.Send(new GetAllAuthorsQuery());
@@ -34,20 +35,20 @@ namespace WebUI.Services
             TempBooks = Books;
         }
 
-        public async Task ResetGrid()
+        public async Task ResetGridAsync()
         {
-            Genres.Select(c => c.IsChoised = true).ToList();
-            Publishers.Select(c => c.IsChoised = true).ToList();
-            Authors.Select(c => c.IsChoised = true).ToList();
+            Genres.ForEach(c => c.IsChoised = true);
+            Publishers.ForEach(c => c.IsChoised = true);
+            Authors.ForEach(c => c.IsChoised = true);
             TempBooks = Books;
             await Grid.RefreshDataAsync();
         }
 
-        public async Task UpdateGrid()
+        public async Task UpdateGridAsync()
         {
-            TempBooks = Books.Where(c => c.Author.IsChoised == true).ToList();
-            TempBooks = TempBooks.Where(c => c.Genre.IsChoised == true).ToList();
-            TempBooks = TempBooks.Where(c => c.Publisher.IsChoised == true).ToList();
+            TempBooks = Books.Where(c => c.Author.IsChoised).ToList();
+            TempBooks = TempBooks.Where(c => c.Genre.IsChoised).ToList();
+            TempBooks = TempBooks.Where(c => c.Publisher.IsChoised).ToList();
             await Grid.RefreshDataAsync();
         }
     }

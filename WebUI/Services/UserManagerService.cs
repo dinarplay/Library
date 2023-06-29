@@ -18,14 +18,14 @@ namespace WebUI.Services
         public bool IsShowAddMenu { get; set; }
 
         //DI
-        public IMediator Mediator { get; set; }
-        public NavigationManager NavigationManager { get; set; }
-
-        public UserManagerService(IMediator Mediator, NavigationManager NavigationManager)
+        private IMediator Mediator { get; set; }
+        private NavigationManager NavigationManager { get; set; }
+        public UserManagerService(IMediator mediator, NavigationManager navigationManager)
         {
-            this.Mediator = Mediator;
-            this.NavigationManager = NavigationManager;
+            this.Mediator = mediator;
+            this.NavigationManager = navigationManager;
         }
+
         public void CallChangeMenu(User user)
         {
             CurrentUser = new User
@@ -43,16 +43,16 @@ namespace WebUI.Services
             NewUser = new();
             IsShowAddMenu = true;
         }
-        public async Task AddUser(User user)
+        public async Task AddUserAsync(User user)
         {
             await Mediator.Send(new AddUserCommand() { User = user });
             NavigationManager.NavigateTo(NavigationManager.Uri, true);
         }
-        public async Task ChangeUser(User user)
+        public async Task ChangeUserAsync(User user)
         {
             await Mediator.Send(new UpdateUserCommand() { User = user });
         }
-        public async Task DeleteUser(User user)
+        public async Task DeleteUserAsync(User user)
         {
             await Mediator.Send(new DeleteUserCommand() { User = user });
             NavigationManager.NavigateTo(NavigationManager.Uri, true);

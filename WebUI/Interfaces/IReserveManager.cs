@@ -4,9 +4,9 @@ namespace WebUI.Interfaces
 {
     public interface IReserveManager
     {
-        Task GiveReserve(Reserve reserve);
-        Task TakeReserve(Reserve reserve);
-        Task DoReserve(Book book);
-        Task DoUnreserve(Reserve reserve);
+        Task GiveReserveAsync(Reserve reserve);
+        Task TakeReserveAsync(Reserve reserve);
+        Task DoReserveAsync(Book book);
+        Task DoUnreserveAsync(Reserve reserve);
     }
 }

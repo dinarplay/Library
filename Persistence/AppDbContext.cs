@@ -2,6 +2,7 @@
 using Domain;
 using Microsoft.EntityFrameworkCore;
 using Persistence.EntityTypeConfigurations;
+using System.Reflection;
 
 namespace Persistence
 {
@@ -20,10 +21,11 @@ namespace Persistence
             //Database.EnsureDeleted();
             Database.EnsureCreated();
         }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.ApplyConfiguration(new BookConfiguration());
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
             modelBuilder.Entity<Role>().HasData(roles);
             modelBuilder.Entity<User>().HasData(users);

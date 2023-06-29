@@ -16,11 +16,11 @@
             @foreach (var item in BookDisplayService.Authors)
             {
             <div>
-                    <input type="checkbox" @bind="item.IsChoised" @bind:after="BookDisplayService.UpdateGrid" />
+                    <input type="checkbox" @bind="item.IsChoised" @bind:after="BookDisplayService.UpdateGridAsync" />
                 <label>@item.Name</label>
             </div>
             }
-            <label @onclick="BookDisplayService.ResetGrid">Сброс</label>
+            <label @onclick="BookDisplayService.ResetGridAsync">Сброс</label>
         </ColumnOptions>
     </PropertyColumn>
     <PropertyColumn Property="c => c.Genre.Name" Sortable="true" IsDefaultSort="SortDirection.Ascending" Title="Жанр">
@@ -28,11 +28,11 @@
             @foreach (var item in BookDisplayService.Genres)
             {
             <div>
-                    <input type="checkbox" @bind="item.IsChoised" @bind:after="BookDisplayService.UpdateGrid" />
+                    <input type="checkbox" @bind="item.IsChoised" @bind:after="BookDisplayService.UpdateGridAsync" />
                 <label>@item.Name</label>
             </div>
             }
-            <label @onclick="BookDisplayService.ResetGrid">Сброс</label>
+            <label @onclick="BookDisplayService.ResetGridAsync">Сброс</label>
         </ColumnOptions>
     </PropertyColumn>
     <PropertyColumn Property="c => c.Publisher.Name" Sortable="true" IsDefaultSort="SortDirection.Ascending" Title="Издатель">
@@ -40,15 +40,15 @@
             @foreach (var item in BookDisplayService.Publishers)
             {
             <div>
-                    <input type="checkbox" @bind="item.IsChoised" @bind:after="BookDisplayService.UpdateGrid" />
+                    <input type="checkbox" @bind="item.IsChoised" @bind:after="BookDisplayService.UpdateGridAsync" />
                 <label>@item.Name</label>
             </div>
             }
-            <label @onclick="BookDisplayService.ResetGrid">Сброс</label>
+            <label @onclick="BookDisplayService.ResetGridAsync">Сброс</label>
         </ColumnOptions>
     </PropertyColumn>
     <TemplateColumn Align="Align.Center" Title="Actions">
-        <button @onclick="() => BookManagerService.DeleteBook(context)">Delete</button>
+        <button @onclick="() => BookManagerService.DeleteBookAsync(context)">Delete</button>
     </TemplateColumn>
 </QuickGrid>
 <Paginator Value="BookDisplayService.Pagination" />
@@ -58,7 +58,7 @@
 {
     <div class="block">
         <div class="about">
-            <EditForm Context="editContext" Model="BookManagerService.NewBook" class="form" OnValidSubmit="() => BookManagerService.AddBook(BookManagerService.NewBook)">
+            <EditForm Context="editContext" Model="BookManagerService.NewBook" class="form" OnValidSubmit="() => BookManagerService.AddBookAsync(BookManagerService.NewBook)">
                 <FluentValidationValidator />
                 <ValidationSummary />
                 <div class="about__block">
@@ -117,7 +117,7 @@
             </EditForm>
         </div>
         <div class="about">
-            <EditForm Context="editContext2" Model="BookManagerService.NewAuthor" class="form" OnValidSubmit="() => BookManagerService.AddAuthor(BookManagerService.NewAuthor)">
+            <EditForm Context="editContext2" Model="BookManagerService.NewAuthor" class="form" OnValidSubmit="() => BookManagerService.AddAuthorAsync(BookManagerService.NewAuthor)">
                 <div class="about__block">
                     <div>
                         <label class="about__block__label" for="Name">Имя</label>
@@ -142,7 +142,7 @@
             </EditForm>
         </div>
         <div class="about">
-            <EditForm Context="editContext3" Model="BookManagerService.NewPublisher" class="form" OnValidSubmit="() => BookManagerService.AddPublisher(BookManagerService.NewPublisher)">
+            <EditForm Context="editContext3" Model="BookManagerService.NewPublisher" class="form" OnValidSubmit="() => BookManagerService.AddPublisherAsync(BookManagerService.NewPublisher)">
                 <div class="about__block">
                     <div>
                         <label class="about__block__label" for="Name">Название</label>
@@ -167,7 +167,7 @@
             </EditForm>
         </div>
         <div class="about">
-            <EditForm Context="editContext4" Model="BookManagerService.NewGenre" class="form" OnValidSubmit="() => BookManagerService.AddGenre(BookManagerService.NewGenre)">
+            <EditForm Context="editContext4" Model="BookManagerService.NewGenre" class="form" OnValidSubmit="() => BookManagerService.AddGenreAsync(BookManagerService.NewGenre)">
                 <div class="about__block">
                     <div>
                         <label class="about__block__label" for="Name">Имя</label>

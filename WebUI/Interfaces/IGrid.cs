@@ -7,8 +7,8 @@ namespace WebUI.Interfaces
     {
         QuickGrid<T> Grid { get; set; }
         PaginationState Pagination { get; set; }
-        Task UpdateGrid();
-        Task ResetGrid();
-        Task GetGrid();
+        Task UpdateGridAsync();
+        Task ResetGridAsync();
+        Task GetGridAsync();
     }
 }

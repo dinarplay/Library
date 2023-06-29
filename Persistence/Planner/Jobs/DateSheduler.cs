@@ -6,7 +6,7 @@ namespace Persistence.Planner.Jobs
 {
     public class DateSheduler
     {
-        public static async void Start(IServiceProvider serviceProvider)
+        public static async Task StartAsync(IServiceProvider serviceProvider)
         {
             IScheduler scheduler = await StdSchedulerFactory.GetDefaultScheduler();
             scheduler.JobFactory = serviceProvider.GetService<JobFactory>();
@@ -18,6 +18,7 @@ namespace Persistence.Planner.Jobs
                 .StartNow()
                 .WithSimpleSchedule(x => x
                 .WithIntervalInHours(1)
+                //.WithIntervalInSeconds(15)
                 .RepeatForever())
                 .Build();
 
