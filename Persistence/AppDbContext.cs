@@ -60,7 +60,7 @@ namespace Persistence
                     Id = 1,
                     Name = "Jhon",
                     Email = "admin@mail.com",
-                    Password = "jhon",
+                    Password = User.SetPassword("jhon"),
                     RoleId = 1,
                 },
                 new User
@@ -68,7 +68,7 @@ namespace Persistence
                     Id = 2,
                     Name = "Susan",
                     Email = "libr@mail.com",
-                    Password = "susan",
+                    Password = User.SetPassword("susan"),
                     RoleId = 3,
                 },
                 new User
@@ -76,7 +76,7 @@ namespace Persistence
                     Id = 3,
                     Name = "Smit",
                     Email = "user@mail.com",
-                    Password = "smit",
+                    Password = User.SetPassword("smit"),
                     RoleId = 2
                 }
         };
